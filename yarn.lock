@@ -10736,6 +10736,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openzeppelin-eth@npm:^2.2.0":
+  version: 2.2.0
+  resolution: "openzeppelin-eth@npm:2.2.0"
+  peerDependencies:
+    zos-lib: ^2.1.0
+  checksum: 7358deeaabf3152b3a704d2c7bc7510ba5d03227009c2a586021f5ff7f2e524d1074cf4d77e5093a169f5db606bfd2f5118ae2a66a087371417de0b45079ff3f
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.8.1":
   version: 0.8.3
   resolution: "optionator@npm:0.8.3"
@@ -12172,6 +12181,7 @@ __metadata:
     husky: ~8.0.3
     lint-staged: ~13.2.2
     next: ~14.0.4
+    openzeppelin-eth: ^2.2.0
     vercel: ~32.4.1
   languageName: unknown
   linkType: soft
