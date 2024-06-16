@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 //import { Contract } from "ethers";
 import { parseEther } from "viem";
 import { EtherInput } from "~~/components/scaffold-eth";
+import { DifferentialValue } from "~~/components/scaffold-eth/DifferentialValue";
 import { ScoreValue } from "~~/components/scaffold-eth/ScoreValue";
 //import { useAccount } from "wagmi";
 //import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
@@ -60,6 +61,9 @@ const Home: NextPage = () => {
           <div className="flex-grow bg-base-300 w-full mt-16 px-6 py-12">
             <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
               <ScoreValue />
+            </div>
+            <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
+              <DifferentialValue />
             </div>
           </div>
         </div>
