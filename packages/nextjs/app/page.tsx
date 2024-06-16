@@ -3,16 +3,38 @@
 //import Link from "next/link";
 import React, { useState } from "react";
 import type { NextPage } from "next";
+//import { Contract } from "ethers";
+import { parseEther } from "viem";
+import { EtherInput } from "~~/components/scaffold-eth";
+import { ScoreValue } from "~~/components/scaffold-eth/ScoreValue";
 //import { useAccount } from "wagmi";
 //import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 //import { Address } from "~~/components/scaffold-eth";
-//import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
-import { EtherInput } from "~~/components/scaffold-eth";
-import { ScoreValue } from "~~/components/scaffold-eth/ScoreValue";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const Home: NextPage = () => {
   //const { address: connectedAddress } = useAccount();
   const [ethAmount, setEthAmount] = useState("");
+  const { writeContractAsync, isPending } = useScaffoldWriteContract("Wager");
+
+  //this function writes attemptBet on the contract when the flush button is clicked
+  const onFlush = async () => {
+    try {
+      await writeContractAsync(
+        {
+          functionName: "attemptBet",
+          value: parseEther(ethAmount),
+        },
+        {
+          onBlockConfirmation: txnReceipt => {
+            console.log(txnReceipt.blockHash);
+          },
+        },
+      );
+    } catch (e) {
+      console.error("error while attempting bet");
+    }
+  };
 
   return (
     <>
@@ -29,7 +51,9 @@ const Home: NextPage = () => {
               <EtherInput value={ethAmount} onChange={amount => setEthAmount(amount)} />
             </div>
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <button id="flushButton">Flush</button>
+              <button id="flushButton" onClick={onFlush}>
+                {isPending ? <span className="loading loading-spinner loading-sm"></span> : "Flush"}
+              </button>
             </div>
           </div>
 
