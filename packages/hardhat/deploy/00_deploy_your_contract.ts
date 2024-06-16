@@ -22,6 +22,7 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
+  //deploy all of the contracts here
   await deploy("YourContract", {
     from: deployer,
     // Contract constructor arguments
@@ -32,13 +33,30 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     autoMine: true,
   });
 
+  //deploy the depositing token contract
+  //we need the contract to store the deployer address as well and take that in as a constructor argument
+  await deploy("FooToken", {
+    from: deployer,
+    args: ["FooToken", "FTN"],
+    log: true,
+    autoMine: true,
+  });
+  const fooToken = await hre.ethers.getContract<Contract>("FooToken", deployer);
+  console.log(fooToken);
+  //deploy the wager contract
+  await deploy("Wager", {
+    from: deployer,
+    args: [fooToken.target, 1000000000],
+    log: true,
+    autoMine: true,
+  });
   // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  //const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
+  //const wager = await hre.ethers.getContract<Contract>("Wager", deployer);
 };
 
 export default deployYourContract;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+deployYourContract.tags = ["PayToilet"];
