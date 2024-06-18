@@ -12,6 +12,7 @@ import { ScoreValue } from "~~/components/scaffold-eth/ScoreValue";
 //import { BugAntIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 //import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { notification } from "~~/utils/scaffold-eth";
 
 const Home: NextPage = () => {
   //const { address: connectedAddress } = useAccount();
@@ -20,20 +21,24 @@ const Home: NextPage = () => {
 
   //this function writes attemptBet on the contract when the flush button is clicked
   const onFlush = async () => {
+    const betAmount = parseEther(ethAmount); //can divide here to reduce the betting size
+    notification.success(`You are guessing ${betAmount / BigInt(10 ** 16)} `);
     try {
       await writeContractAsync(
         {
           functionName: "attemptBet",
-          value: parseEther(ethAmount),
+          value: betAmount,
         },
         {
           onBlockConfirmation: txnReceipt => {
             console.log(txnReceipt.blockHash);
+            notification.info(txnReceipt.blockHash);
           },
         },
       );
     } catch (e) {
       console.error("error while attempting bet");
+      notification.error("error while attemping bet");
     }
   };
 
