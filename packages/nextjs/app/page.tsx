@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 //import { Contract } from "ethers";
 import { parseEther } from "viem";
 import { EtherInput } from "~~/components/scaffold-eth";
+import { BetValues } from "~~/components/scaffold-eth/BetValues";
 import { DifferentialValue } from "~~/components/scaffold-eth/DifferentialValue";
 import { ScoreValue } from "~~/components/scaffold-eth/ScoreValue";
 //import { useAccount } from "wagmi";
@@ -18,7 +19,6 @@ const Home: NextPage = () => {
   //const { address: connectedAddress } = useAccount();
   const [ethAmount, setEthAmount] = useState("");
   const { writeContractAsync, isPending } = useScaffoldWriteContract("Wager");
-
   //this function writes attemptBet on the contract when the flush button is clicked
   const onFlush = async () => {
     const betAmount = parseEther(ethAmount); //can divide here to reduce the betting size
@@ -26,7 +26,7 @@ const Home: NextPage = () => {
     try {
       await writeContractAsync(
         {
-          functionName: "attemptBet",
+          functionName: "attemptToleranceBet",
           value: betAmount,
         },
         {
@@ -70,6 +70,10 @@ const Home: NextPage = () => {
             <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
               <DifferentialValue />
             </div>
+          </div>
+
+          <div>
+            <BetValues />
           </div>
         </div>
       </div>

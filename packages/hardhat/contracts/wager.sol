@@ -3,6 +3,7 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "./IFooToken.sol";
+import "hardhat/console.sol";
 
 
 contract Wager {
@@ -13,6 +14,7 @@ contract Wager {
     uint public tolerance;
     mapping (address => uint) scores;
     IFooToken private currentToken;
+    uint public resultHolder;
 
     using SafeMath for uint;
 
@@ -20,6 +22,7 @@ contract Wager {
     event scoreCalculated(int score);
     event scoreTooLow(string txt);
     event winner(string txt);
+    event ToleranceBetPlaced(int, int, int, uint);
 
     modifier isAdmin(address _sender) {
         require(msg.sender == currentToken.currentOwner(), "Caller is not the deposit token owner");//call the token's smart contract here);
@@ -68,6 +71,14 @@ contract Wager {
 	return differential;
     }
 
+    function getTolerance() public view returns (uint) {
+	return tolerance;
+    }
+
+    function getResultHolder() public view returns (uint) {
+    	return resultHolder;
+    }
+
     function attemptBet() public payable returns (int) {
         uint tg = getTarget();
         emit targetAcquired(tg);
@@ -97,7 +108,7 @@ contract Wager {
         return score;
     }
 
-    function attemptToleranceBet() public payable returns (int) {
+    function attemptToleranceBet() public payable returns (int, int, int, uint) {
 	// this is the tagert value, based on block's timestamp and block number
         uint tg = getTarget();
 	// score is the difference between what was wagered and what the target is
@@ -108,6 +119,10 @@ contract Wager {
 	int result = (score % 100) - randDifferential;
 	// set to an absolute value
 	result = result >= 0 ? result: -result;
+	resultHolder = uint(result);
+	//console.logString("Score:%s | RandDiff:%s | Result:%s | Tolerance:%s", score%100, randDifferential, result, tolerance);
+	emit ToleranceBetPlaced(score % 100, randDifferential, result, tolerance);
+	/*
 	if (uint(result) < tolerance) {
             currentToken.credit(msg.sender, uint(result));
             scores[msg.sender] += uint(result);
@@ -120,7 +135,9 @@ contract Wager {
             }
             emit scoreTooLow("score was too low");
 	}
-	return score;
+	//return score;
+        */
+	return (score % 100, randDifferential, result, tolerance);
 
     }
 }

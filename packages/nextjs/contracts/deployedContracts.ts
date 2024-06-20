@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     FooToken: {
-      address: "0x922D6956C99E12DFeB3224DEA977D0939758A1Fe",
+      address: "0xfaAddC93baf78e89DCf37bA67943E1bE8F37Bb8c",
       abi: [
         {
           inputs: [
@@ -424,7 +424,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     Wager: {
-      address: "0x21dF544947ba3E8b3c32561399E88B52Dc8b2823",
+      address: "0x276C216D241856199A83bf27b2286659e5b877D3",
       abi: [
         {
           inputs: [
@@ -441,6 +441,37 @@ const deployedContracts = {
           ],
           stateMutability: "nonpayable",
           type: "constructor",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: false,
+              internalType: "int256",
+              name: "",
+              type: "int256",
+            },
+            {
+              indexed: false,
+              internalType: "int256",
+              name: "",
+              type: "int256",
+            },
+            {
+              indexed: false,
+              internalType: "int256",
+              name: "",
+              type: "int256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "ToleranceBetPlaced",
+          type: "event",
         },
         {
           anonymous: false,
@@ -529,6 +560,21 @@ const deployedContracts = {
               name: "",
               type: "int256",
             },
+            {
+              internalType: "int256",
+              name: "",
+              type: "int256",
+            },
+            {
+              internalType: "int256",
+              name: "",
+              type: "int256",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
           ],
           stateMutability: "payable",
           type: "function",
@@ -586,6 +632,19 @@ const deployedContracts = {
           type: "function",
         },
         {
+          inputs: [],
+          name: "getResultHolder",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
           inputs: [
             {
               internalType: "address",
@@ -607,6 +666,32 @@ const deployedContracts = {
         {
           inputs: [],
           name: "getTarget",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getTolerance",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "resultHolder",
           outputs: [
             {
               internalType: "uint256",
@@ -672,7 +757,7 @@ const deployedContracts = {
       inheritedFunctions: {},
     },
     YourContract: {
-      address: "0x162A433068F51e18b7d13932F27e66a3f99E6890",
+      address: "0xA7c59f010700930003b33aB25a7a0679C860f29c",
       abi: [
         {
           inputs: [
