@@ -12,7 +12,6 @@ contract Wager {
     address public admin;
     uint public differential;
     uint public tolerance;
-    mapping (address => uint) scores;
     IFooToken private currentToken;
     uint public resultHolder;
 
@@ -79,35 +78,6 @@ contract Wager {
     	return resultHolder;
     }
 
-    function attemptBet() public payable returns (int) {
-        uint tg = getTarget();
-        emit targetAcquired(tg);
-	// Get the value of the input
-	// score is currently wei - (target) where target is on the order of 10^7 - 10^8
-        int score = int(msg.value) - int(tg);
-	score /= 10**16; // this is the current desired range
-	// get the absolute value of the differential between the differential and the score
-	int delta = (score - int(differential)) >= 0 ? (score - int(differential)) : -1 * (score - int(differential));
-	//flip score back to positive number to allow for crediting
-	score = score >= 0 ? score: -score;
-	uint uscore = uint(score);
-        //if (score < differential) {
-	if (delta < int(tolerance)) {
-            currentToken.credit(msg.sender, uscore);
-            scores[msg.sender] += uscore;
-	    emit winner("Success!");
-        } else {
-            if (currentToken.debit(msg.sender, uscore)) {
-                emit scoreTooLow("score subtracted");
-		// need to update players score in the negative case too
-		scores[msg.sender] -= uscore; 
-            }
-            emit scoreTooLow("score was too low");
-        }
-        emit scoreCalculated(score);
-        return score;
-    }
-
     function attemptToleranceBet() public payable returns (int, int, int, uint) {
 	// this is the tagert value, based on block's timestamp and block number
         uint tg = getTarget();
@@ -122,21 +92,14 @@ contract Wager {
 	resultHolder = uint(result);
 	//console.logString("Score:%s | RandDiff:%s | Result:%s | Tolerance:%s", score%100, randDifferential, result, tolerance);
 	emit ToleranceBetPlaced(score % 100, randDifferential, result, tolerance);
-	/*
+	//made change here to avoid potential overflows?
 	if (uint(result) < tolerance) {
             currentToken.credit(msg.sender, uint(result));
             scores[msg.sender] += uint(result);
 	    emit winner("Success!");
 	} else {
-            if (currentToken.debit(msg.sender, uint(result))) {
-                emit scoreTooLow("score subtracted");
-		// need to update players score in the negative case too
-		scores[msg.sender] -= uint(result); 
-            }
-            emit scoreTooLow("score was too low");
+	    currentToken.debit(msg.sender, uint(result));
 	}
-	//return score;
-        */
 	return (score % 100, randDifferential, result, tolerance);
 
     }
