@@ -22,17 +22,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  //deploy all of the contracts here
-  await deploy("YourContract", {
-    from: deployer,
-    // Contract constructor arguments
-    args: [deployer],
-    log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
-    autoMine: true,
-  });
-
   //deploy the depositing token contract
   //we need the contract to store the deployer address as well and take that in as a constructor argument
   await deploy("FooToken", {
@@ -50,8 +39,6 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     log: true,
     autoMine: true,
   });
-  // Get the deployed contract to interact with it after deploying.
-  //const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
   //const wager = await hre.ethers.getContract<Contract>("Wager", deployer);
 };
 
